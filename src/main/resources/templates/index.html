@@ -1,0 +1,31 @@
+<html lang="ja">
+
+<head>
+	<meta charset="utf-8" />
+	<script src="http://unpkg.com/vue/dist/vue.js"></script>
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+	<title>名前</title>
+</head>
+
+<body>
+	<div id="app">
+		<div v-for="item in items">{{item.description}}</div>
+	</div>
+	<script>
+		var app = new Vue({
+			el: '#app',
+			data() {
+				return {
+					items: null
+				}
+			},
+			mounted() {
+				axios
+					.get('http://localhost:8080/getRes')
+					.then(response => (this.items = response.data))
+			}
+		})
+	</script>
+</body>
+
+</html>
