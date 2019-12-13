@@ -1,0 +1,131 @@
+<html>
+
+<head>
+	<meta charset="utf-8" />
+	<script src="http://unpkg.com/vue/dist/vue.js"></script>
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/element-ui/2.13.0/theme-chalk/index.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/element-ui/2.13.0/index.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/element-ui/2.13.0/locale/ja.js"></script>
+	<title>ラクラクピザ | 商品詳細</title>
+</head>
+
+<body>
+	<div id="app">
+		{{$data.form}}
+		<el-menu :default-active="activeIndex2" class="el-menu-demo" mode="horizontal" @select="handleSelect"
+			background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
+			<el-menu-item index="1"><a href="/">ラクラクピザ</a></el-menu-item>
+			<el-submenu index="2">
+				<template slot="title">Workspace</template>
+				<el-menu-item index="2-1">商品詳細</el-menu-item>
+				<el-menu-item index="2-2">item two</el-menu-item>
+				<el-menu-item index="2-3">item three</el-menu-item>
+			</el-submenu>
+			<el-menu-item index="3">Info</el-menu-item>
+			<el-menu-item index="4"><a href="/login" target="_blank">ログイン</a></el-menu-item>
+		</el-menu>
+		<el-col :span="16" :offset="4">
+			<el-card class="box-card card">
+				<div slot="header" class="clearfix">
+					<span>{{item.name}}</span>
+					<el-button style="float: right; padding-top: 49" type="text">
+						<h2>合計金額: {{ sum | addComma }}円</h2>
+					</el-button>
+				</div>
+				<el-row>
+					<el-col :span="10">
+						<el-image style="width: 300px; height: 200px" :src="'/img/'+item.imagePath">
+						</el-image>
+
+					</el-col>
+					<el-col :span="14">
+						<div>
+							<el-tag>商品説明</el-tag><br>
+							{{item.description}}
+						</div>
+						<div>
+							<el-tag>商品を選択</el-tag>
+							<el-form ref="form" :model="form" label-width="120px" action="/addCart">
+								<el-form-item label="サイズ:">
+									<el-radio-group v-model="form.size">
+										<el-radio label="M" name="size">{{ item.priceM | addComma }}円</el-radio>
+										<el-radio label="L" name="size">{{ item.priceL | addComma }}円</el-radio>
+									</el-radio-group>
+								</el-form-item>
+								<el-form-item label="数量：">
+									<el-select v-model="form.quantity" placeholder="数量を選択して下さい" name="quantity">
+										<el-option v-for="n of 20" :key="n" :label="n" :value="n">
+										</el-option>
+									</el-select>
+								</el-form-item>
+								<el-form-item label="トッピング：  　　M 200円　 L 300円）">
+									<el-checkbox-group v-model="form.topping" v-for="topping in item.toppingList"
+										:key="topping.id">
+										<el-checkbox :label="topping.id" name="orderToppingList">{{topping.name}}</el-checkbox>
+									</el-checkbox-group>
+								</el-form-item>
+								<el-form-item>
+									<el-button type="primary" @click="onSubmit" native-type="submit">カートに入れる</el-button>
+									<el-button>Cancel</el-button>
+								</el-form-item>
+							</el-form>
+						</div>
+					</el-col>
+				</el-row>
+			</el-card>
+		</el-col>
+
+	</div>
+	<style>
+		.card {
+			margin: 40px 0;
+		}
+	</style>
+	<script>
+		var app = new Vue({
+			el: '#app',
+			data: {
+				item: null,
+				activeIndex2: '1',
+				form: {
+					quantity: 1,
+					topping: [],
+					size: 'M',
+				}
+			},
+			methods: {
+				handleSelect(key, keyPath) {
+					console.log(key, keyPath);
+				},
+				onSubmit() {
+					console.log('submit!');
+
+				}
+			},
+			computed: {
+				sum: function () {
+					if (this.form.size == 'M') {
+						return this.item.priceM * this.form.quantity + (this.form.topping.length * 200);
+					} else {
+						return this.item.priceL * this.form.quantity + (this.form.topping.length * 300);
+					}
+				}
+			},
+			filters: {
+				addComma: function (value) {
+					return value.toLocaleString();
+				}
+			},
+			mounted() {
+				var id = location.search.substring(4);
+				console.log(id);
+				axios.get('http://localhost:8080/getDetail/' + id)
+					.then(response => (this.item = response.data))
+				console.log(this.item)
+			}
+		})
+	</script>
+</body>
+
+</html>

@@ -1,23 +1,54 @@
-<html lang="ja">
+<html>
 
 <head>
-	<meta charset="utf-8" />
-	<script src="http://unpkg.com/vue/dist/vue.js"></script>
-	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-	<title>名前</title>
+<meta charset="utf-8" />
+<script src="http://unpkg.com/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/element-ui/2.13.0/theme-chalk/index.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/element-ui/2.13.0/index.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/element-ui/2.13.0/locale/ja.js"></script>
+<title>ラクラクピザ | 商品一覧</title>
 </head>
 
 <body>
+
 	<div id="app">
-		<div v-for="item in items">{{item.description}}</div>
+		<div class="line"></div>
+		<el-menu :default-active="activeIndex2" class="el-menu-demo" mode="horizontal" @select="handleSelect" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b"> <el-menu-item index="1">ラクラクピザ</el-menu-item> <el-submenu index="2"> <template slot="title">Workspace</template>
+		<el-menu-item index="2-1">商品詳細</el-menu-item> <el-menu-item index="2-2">item two</el-menu-item> <el-menu-item index="2-3">item three</el-menu-item> </el-submenu> </el-submenu> <el-menu-item index="3">Info</el-menu-item> <el-menu-item index="4"> <a href="/login" target="_blank">ログイン</a></el-menu-item> </el-menu>
+		<el-row> <el-col :span="6" v-for="(item, index) in items" :key="item.id"> <el-card shadow="always" :body-style="{ padding: '0px' }" class="card"> <img :src="'/img/'+ item.imagePath" class="image">
+		<div style="padding: 14px;">
+			<div>{{item.name}}</div>
+			<div>
+				<el-tag type="success"> Mサイズ </el-tag>
+				{{item.priceM}}円
+			</div>
+			<div>
+				<el-tag type="danger"> Lサイズ </el-tag>
+				{{item.priceL}}円
+			</div>
+
+			<div class="bottom clearfix">
+				<time class="time"></time>
+				<a :href="'/item_detail?id='+ item.id"><el-button type="text" class="button">詳細ページ</el-button></a>
+			</div>
+		</div>
+		</el-card> </el-col>
 	</div>
+
 	<script>
 		var app = new Vue({
 			el: '#app',
 			data() {
 				return {
-					items: null
+					items: null,
+				    activeIndex2: '1'
 				}
+			},
+			methods: {
+				 handleSelect(key, keyPath) {
+				        console.log(key, keyPath);
+				 }
 			},
 			mounted() {
 				axios
@@ -26,6 +57,40 @@
 			}
 		})
 	</script>
+	<style>
+.card {
+	margin: 16;
+}
+
+.time {
+	font-size: 13px;
+	color: #999;
+}
+
+.bottom {
+	margin-top: 30px;
+	line-height: 12px;
+}
+
+.button {
+	padding: 0;
+	float: right;
+}
+
+.image {
+	width: 100%;
+	display: block;
+}
+
+.clearfix:before, .clearfix:after {
+	display: table;
+	content: "";
+}
+
+.clearfix:after {
+	clear: both
+}
+</style>
 </body>
 
 </html>

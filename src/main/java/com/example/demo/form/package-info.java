@@ -5,4 +5,4 @@
  * @author takahiro.suzuki
  *
  */
-package com.example.demo.controller;
+package com.example.demo.form;

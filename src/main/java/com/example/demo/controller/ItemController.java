@@ -11,4 +11,9 @@ public class ItemController {
 		return "index";
 	}
 
+	@RequestMapping("/item_detail")
+	public String item_detail() {
+		return "item_details";
+	}
+
 }
