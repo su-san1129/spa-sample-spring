@@ -1,5 +1,7 @@
 package com.example.demo.repository;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
@@ -18,6 +20,8 @@ import com.example.demo.domain.User;
  */
 @Repository
 public class UserRepository {
+
+	private static final Logger logger = LoggerFactory.getLogger(UserRepository.class);
 
 	@Autowired
 	private NamedParameterJdbcTemplate template;
@@ -44,7 +48,7 @@ public class UserRepository {
 			User user = template.queryForObject(sql, param, USER_ROW_MAPPER);
 			return user;
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.info("userRepositoryにて例外が発生しました！");
 			return null;
 		}
 	}

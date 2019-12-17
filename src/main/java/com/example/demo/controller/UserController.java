@@ -56,6 +56,9 @@ public class UserController {
 			model.addAttribute("loginError", "メールアドレスまたはパスワードが違います。");
 		}
 
+		if (request.getHeader("referer") == null) {
+			return "login";
+		}
 		String url = request.getHeader("referer").substring(21);
 		// String url = request.getHeader("referer").substring(39);// デプロイ用
 		if (!("/login".equals(url)) && !"/register_user".equals(url) && !"/register".equals(url)) {
@@ -100,7 +103,10 @@ public class UserController {
 			shoppingCartService.changeOrder(userId, loginUser);
 		}
 		String url = (String) session.getAttribute("url");
-		return "forward:" + url;
+		if (url == null) {
+			return "forward:/";
+		}
+		return "redirect:" + url;
 
 	}
 

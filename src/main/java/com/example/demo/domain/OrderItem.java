@@ -25,6 +25,16 @@ public class OrderItem {
 	/** オーダートッピングリスト */
 	private List<OrderTopping> orderToppingList;
 
+	private Integer subTotal;
+
+	public Integer getSubTotal() {
+		return subTotal;
+	}
+
+	public void setSubTotal(Integer subTotal) {
+		this.subTotal = subTotal;
+	}
+
 	public OrderItem() {
 	}
 

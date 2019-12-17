@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<title>繝斐じ螻九�ｮ繝阪ャ繝域ｳｨ譁�</title>
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-offset-3 col-lg-6 col-md-offset-2 col-md-8 col-sm-10 col-xs-12">
+				<div class="well">
+					<form method="post" action="item_list.html" th:action="@{/register}" th:object="${registerUserForm}">
+						<fieldset>
+							<legend>繝ｦ繝ｼ繧ｶ繝ｼ逋ｻ骭ｲ</legend>
+							<div class="form-group">
+								<label for="inputName">蜷榊燕:</label>
+								<label class="control-label" style="color: red" for="inputError" th:errors="*{name}"></label>
+								<input type="text" id="inputName" class="form-control" placeholder="Name" name="name" th:field="*{name}">
+							</div>
+							<div class="form-group">
+								<label for="inputEmail">繝｡繝ｼ繝ｫ繧｢繝峨Ξ繧ｹ:</label>
+								<label class="control-label" style="color: red" for="inputError" th:errors="*{email}"></label>
+								<input type="text" id="inputEmail" class="form-control" placeholder="Email" name="email" th:field="*{email}">
+							</div>
+							<div class="form-group">
+								<label for="inputZipcode">驛ｵ萓ｿ逡ｪ蜿ｷ(蜊願ｧ偵ワ繧､繝輔Φ辟｡縺�):</label> 
+								<label class="control-label" style="color: red" for="inputError" th:errors="*{zipcode}"></label>
+								<input type="button" value="菴乗園讀懃ｴ｢">
+								<input type="text" id="inputZipcode" class="form-control" placeholder="Zipcode" name="zipcode" th:field="*{zipcode}">
+							</div>
+							<div class="form-group">
+								<label for="inputAddress">菴乗園:</label> 
+								<label class="control-label" style="color: red" for="inputError" th:errors="*{address}">鬮｣蜴�ｽｽ�ｽｴ髣包ｽｵ隲､諛遺�ｳ鬩幢ｽ｢�ｿｽ�ｽｽ�ｽｧ鬮ｮ蛹ｺ�ｽｩ�ｽｸ�ｿｽ�ｽｽ�ｽｿ�ｿｽ�ｽｽ�ｽｽ�ｿｽ�ｽｿ�ｽｽ�ｿｽ�ｽｽ�ｽｽ�ｿｽ�ｽｽ�ｽ･鬮ｯ�ｽｷ霑壼遜�ｽｽ�ｽｸ陷ｻ�ｽｻ�ｿｽ�ｽｽ�ｽｼ�ｿｽ�ｽｿ�ｽｽ鬩搾ｽｵ�ｿｽ�ｽｽ�ｽｺ�ｿｽ�ｽｿ�ｽｽ�ｿｽ�ｽｽ�ｽｽ�ｿｽ�ｽｽ�ｽｦ鬩搾ｽｵ�ｿｽ�ｽｽ�ｽｺ髣包ｽｳ陝ｯ�ｽｩ陷ｻ�ｽｳ鬩搾ｽｵ�ｿｽ�ｽｽ�ｽｺ鬮ｴ驛�ｽｲ�ｽｻ�ｿｽ�ｽｽ�ｽｼ�ｿｽ�ｽｿ�ｽｽ</label>
+								<input type="text" id="inputAddress" class="form-control" placeholder="Address" name="address" th:field="*{address}">
+							</div>
+							<div class="form-group">
+								<label for="inputTel">髮ｻ隧ｱ逡ｪ蜿ｷ(蜊願ｧ偵ワ繧､繝輔Φ辟｡縺�):</label> 
+								<label class="control-label" style="color: red" for="inputError" th:errors="*{telephone}">鬯ｯ�ｽｮ�ｿｽ�ｽｽ�ｽｮ�ｿｽ�ｽｿ�ｽｽ�ｿｽ�ｽｽ�ｽｽ�ｿｽ�ｽｽ�ｽｻ鬯ｮ�ｽｫ�ｿｽ�ｽｽ�ｽｧ�ｿｽ�ｽｿ�ｽｽ�ｿｽ�ｽｽ�ｽｽ�ｿｽ�ｽｽ�ｽｱ鬯ｨ�ｽｾ�ｿｽ�ｽｽ�ｽ｡�ｿｽ�ｽｿ�ｽｽ�ｿｽ�ｽｽ�ｽｽ�ｿｽ�ｽｽ�ｽｪ鬮ｯ�ｽｷ�ｿｽ�ｽｽ�ｽｿ�ｿｽ�ｽｿ�ｽｽ�ｿｽ�ｽｽ�ｽｽ�ｿｽ�ｽｽ�ｽｷ鬩幢ｽ｢�ｿｽ�ｽｽ�ｽｧ鬮ｮ蛹ｺ�ｽｩ�ｽｸ�ｿｽ�ｽｽ�ｽｿ�ｿｽ�ｽｽ�ｽｽ�ｿｽ�ｽｿ�ｽｽ�ｿｽ�ｽｽ�ｽｽ�ｿｽ�ｽｽ�ｽ･鬮ｯ�ｽｷ霑壼遜�ｽｽ�ｽｸ陷ｻ�ｽｻ�ｿｽ�ｽｽ�ｽｼ�ｿｽ�ｽｿ�ｽｽ鬩搾ｽｵ�ｿｽ�ｽｽ�ｽｺ�ｿｽ�ｽｿ�ｽｽ�ｿｽ�ｽｽ�ｽｽ�ｿｽ�ｽｽ�ｽｦ鬩搾ｽｵ�ｿｽ�ｽｽ�ｽｺ髣包ｽｳ陝ｯ�ｽｩ陷ｻ�ｽｳ鬩搾ｽｵ�ｿｽ�ｽｽ�ｽｺ鬮ｴ驛�ｽｲ�ｽｻ�ｿｽ�ｽｽ�ｽｼ�ｿｽ�ｽｿ�ｽｽ</label>
+								<input type="text" id="inputTel" class="form-control" placeholder="Tel" name="telephone" th:field="*{telephone}">
+							</div>
+							<div class="form-group">
+								<label for="inputPassword">繝代せ繝ｯ繝ｼ繝�:</label> 
+								<label class="control-label" style="color: red" for="inputError" th:errors="*{password}">鬩幢ｽ｢隴乗�ｶ�ｽｽ�ｽｻ�ｿｽ�ｽｽ�ｽ｣驍ｵ�ｽｺ陝ｶ�ｽｷ�ｿｽ�ｽｽ�ｽｹ隴趣ｽ｢�ｿｽ�ｽｽ�ｽｽ�ｿｽ�ｽｽ�ｽｯ鬩幢ｽ｢隴趣ｽ｢�ｿｽ�ｽｽ�ｽｽ�ｿｽ�ｽｽ�ｽｼ鬩幢ｽ｢隴取得�ｽｽ�ｽｳ�ｿｽ�ｽｽ�ｽｨ�ｿｽ�ｽｿ�ｽｽ�ｿｽ�ｽｽ�ｽｽ陞ｳ螢ｽ�ｿｽ�ｽｦ�ｿｽ�ｽｿ�ｽｽ�ｿｽ�ｽｽ�ｽｽ�ｿｽ�ｽｽ�ｽ･鬮ｯ�ｽｷ霑壼遜�ｽｽ�ｽｸ陷ｻ�ｽｻ�ｿｽ�ｽｽ�ｽｼ�ｿｽ�ｽｿ�ｽｽ鬩搾ｽｵ�ｿｽ�ｽｽ�ｽｺ�ｿｽ�ｽｿ�ｽｽ�ｿｽ�ｽｽ�ｽｽ�ｿｽ�ｽｽ�ｽｦ鬩搾ｽｵ�ｿｽ�ｽｽ�ｽｺ髣包ｽｳ陝ｯ�ｽｩ陷ｻ�ｽｳ鬩搾ｽｵ�ｿｽ�ｽｽ�ｽｺ鬮ｴ驛�ｽｲ�ｽｻ�ｿｽ�ｽｽ�ｽｼ�ｿｽ�ｽｿ�ｽｽ</label>
+								<input type="password" id="inputPassword" class="form-control" placeholder="Password" name="password" th:field="*{password}">
+							</div>
+							<div class="form-group">
+								<label for="inputConfirmationPassword">遒ｺ隱咲畑繝代せ繝ｯ繝ｼ繝�:</label> 
+								<label class="control-label" style="color: red" for="inputError" th:errors="*{confirmationPassword}">鬯ｩ蠅捺�｣�ｿｽ�ｽｽ�ｽｽ�ｿｽ�ｽｽ�ｽｺ鬯ｮ�ｽｫ�ｿｽ�ｽｽ�ｽｱ髯ｷ�ｽ･�ｿｽ�ｽｽ�ｽｲ鬨ｾ�ｽ｡鬩｢謳ｾ�ｽｽ�ｽｹ隴乗�ｶ�ｽｽ�ｽｻ�ｿｽ�ｽｽ�ｽ｣驍ｵ�ｽｺ陝ｶ�ｽｷ�ｿｽ�ｽｽ�ｽｹ隴趣ｽ｢�ｿｽ�ｽｽ�ｽｽ�ｿｽ�ｽｽ�ｽｯ鬩幢ｽ｢隴趣ｽ｢�ｿｽ�ｽｽ�ｽｽ�ｿｽ�ｽｽ�ｽｼ鬩幢ｽ｢隴取得�ｽｽ�ｽｳ�ｿｽ�ｽｽ�ｽｨ�ｿｽ�ｽｿ�ｽｽ�ｿｽ�ｽｽ�ｽｽ陞ｳ螢ｽ�ｿｽ�ｽｦ�ｿｽ�ｽｿ�ｽｽ�ｿｽ�ｽｽ�ｽｽ�ｿｽ�ｽｽ�ｽ･鬮ｯ�ｽｷ霑壼遜�ｽｽ�ｽｸ陷ｻ�ｽｻ�ｿｽ�ｽｽ�ｽｼ�ｿｽ�ｽｿ�ｽｽ鬩搾ｽｵ�ｿｽ�ｽｽ�ｽｺ�ｿｽ�ｽｿ�ｽｽ�ｿｽ�ｽｽ�ｽｽ�ｿｽ�ｽｽ�ｽｦ鬩搾ｽｵ�ｿｽ�ｽｽ�ｽｺ髣包ｽｳ陝ｯ�ｽｩ陷ｻ�ｽｳ鬩搾ｽｵ�ｿｽ�ｽｽ�ｽｺ鬮ｴ驛�ｽｲ�ｽｻ�ｿｽ�ｽｽ�ｽｼ�ｿｽ�ｽｿ�ｽｽ</label>
+								<input type="password" id="inputConfirmationPassword" class="form-control" placeholder="Confirmation Password" name="confirmationPassword" th:field="*{confirmationPassword}">
+							</div>
+							<div class="form-group">
+								<button type="submit" class="btn btn-primary">逋ｻ骭ｲ</button>
+								<button type="reset" class="btn btn-primary">繧ｯ繝ｪ繧｢</button>
+							</div>
+						</fieldset>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

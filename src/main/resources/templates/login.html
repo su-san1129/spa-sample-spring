@@ -1,0 +1,94 @@
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="utf-8" />
+	<script src="http://unpkg.com/vue/dist/vue.js"></script>
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/element-ui/2.13.0/theme-chalk/index.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/element-ui/2.13.0/index.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/element-ui/2.13.0/locale/ja.js"></script>
+	<title>ラクラクピザ | 商品一覧</title>
+</head>
+
+<body>
+	<div id="app">
+		<el-menu :default-active="activeIndex2" class="el-menu-demo" mode="horizontal" @select="handleSelect"
+			background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
+			<el-menu-item index="1">ラクラクピザ</el-menu-item>
+			<el-submenu index="2"> <template slot="title">Workspace</template>
+				<el-menu-item index="2-1">商品詳細</el-menu-item>
+				<el-menu-item index="2-2">item two</el-menu-item>
+				<el-menu-item index="2-3">item three</el-menu-item>
+			</el-submenu>
+			<el-menu-item index="3">Info</el-menu-item>
+			<el-menu-item index="4"><a href="/login">ログイン</a></el-menu-item>
+		</el-menu>
+		<el-col :span="16" :offset="4">
+			<el-card>
+				<h2>ログイン</h2>
+				<el-form :model="loginValidateForm" ref="loginValidateForm" label-width="100px" method="post"
+					th:action="@{/userLogin}" name="loginValidateForm">
+					<el-form-item label="Eメール" prop="email" name="email"
+						:rules="[{ required: true, message: 'Eメールを入力してください'},{ type: 'email', message: 'Eメール形式で入力してください'}]">
+						<el-input type="email" v-model.number="loginValidateForm.email" autocomplete="off" name="email">
+						</el-input>
+					</el-form-item>
+					<el-form-item label="パスワード" prop="password" name="password"
+						:rules="{ required: true, message: 'パスワードを入力してください' }">
+						<el-input type="password" v-model.number="loginValidateForm.password" autocomplete="off"
+							name="password"></el-input>
+						<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+					</el-form-item>
+
+					<el-form-item>
+						<el-button type="primary" native-type="submit">Submit</el-button>
+						<el-button @click="resetForm('numberValidateForm')">Reset</el-button>
+					</el-form-item>
+				</el-form>
+			</el-card>
+		</el-col>
+	</div>
+</body>
+<script>
+	var app = new Vue({
+		el: '#app',
+		data() {
+			return {
+				activeIndex2: '1',
+				loginValidateForm: {
+					email: '',
+					password: ''
+				}
+			};
+		},
+		methods: {
+			submitForm(formName) {
+				this.$refs[formName].validate((valid) => {
+					if (valid) {
+						alert('submit!');
+						document.loginValidateForm.submit()
+						console.log(this.loginValidateForm)
+					} else {
+						console.log('error submit!!');
+						return false;
+					}
+				});
+			},
+			resetForm(formName) {
+				this.$refs[formName].resetFields();
+			},
+
+			handleSelect(key, keyPath) {
+				console.log(key, keyPath);
+			}
+		}
+	})
+</script>
+<style>
+.el-card{
+	margin-top: 20px
+
+}
+</style>
+
+</html>

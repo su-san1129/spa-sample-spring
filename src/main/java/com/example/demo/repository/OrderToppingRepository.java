@@ -1,5 +1,7 @@
 package com.example.demo.repository;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
@@ -19,6 +21,8 @@ import com.example.demo.domain.Topping;
  */
 @Repository
 public class OrderToppingRepository {
+
+	private static final Logger logger = LoggerFactory.getLogger(OrderToppingRepository.class);
 
 	@Autowired
 	private NamedParameterJdbcTemplate template;
@@ -51,6 +55,7 @@ public class OrderToppingRepository {
 			OrderTopping orderTopping = template.queryForObject(sql, param, ORDER_TOPPING_ROW_MAPPER);
 			return orderTopping;
 		} catch (Exception e) {
+			logger.info("loadにてエラーが発生しました。");
 			e.printStackTrace();
 			return null;
 		}
@@ -76,6 +81,29 @@ public class OrderToppingRepository {
 		String sql = "DELETE FROM order_toppings WHERE order_item_id = :orderItemId";
 		SqlParameterSource param = new MapSqlParameterSource().addValue("orderItemId", orderItemId);
 		template.update(sql, param);
+	}
+
+	/**
+	 * PKで注文トッピングを削除する.
+	 * 
+	 * @param id ID
+	 */
+	public void deleteById(Integer id) {
+		String sql = "DELETE FROM order_toppings WHERE id = :id";
+		SqlParameterSource param = new MapSqlParameterSource().addValue("id", id);
+		template.update(sql, param);
+	}
+
+	public OrderTopping findByIdAndOrderItemId(Integer toppingId, Integer orderItemId) {
+		try {
+			String sql = "SELECT id, topping_id, order_item_id FROM order_toppings WHERE topping_id=:toppingId AND order_item_id=:orderItemId;";
+			SqlParameterSource param = new MapSqlParameterSource().addValue("toppingId", toppingId)
+					.addValue("orderItemId", orderItemId);
+			return template.queryForObject(sql, param, ORDER_TOPPING_ROW_MAPPER);
+		} catch (Exception e) {
+			logger.info("findByIdAndOrderItemIdにてエラーが発生しました。");
+			return null;
+		}
 	}
 
 }

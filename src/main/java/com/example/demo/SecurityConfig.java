@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 /**
@@ -34,28 +35,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
-				.antMatchers(
-						"/"
-						, "/login"
-						, "/userLogin"
-						, "/register_user"
-						, "/register"
-						, "/item_detail"
-						, "/cart_list/**")
-				.permitAll()
-				.antMatchers("/order_confirm", "/logout", "/order_finished")
-				.hasRole("USER").anyRequest()
-				.authenticated();
-		http.formLogin()
-				.loginPage("/login")
-				.loginProcessingUrl("/userLogin")
-				.defaultSuccessUrl("/successPath", true)
-				.usernameParameter("email")
-				.passwordParameter("password");
-		http.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout**"))
-				.logoutSuccessUrl("/")
-				.deleteCookies("JSESSIONID")
-				.invalidateHttpSession(true);
+				.antMatchers("/", "/login", "/userLogin", "/register_user", "/register", "/item_detail",
+						"/cart_list/**", "/getRes/**")
+				.permitAll().antMatchers("/order_confirm/**", "/logout", "/order_finished").hasRole("USER").anyRequest()
+				.authenticated().and().csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
+		http.formLogin().loginPage("/login").loginProcessingUrl("/userLogin").defaultSuccessUrl("/successPath", true)
+				.usernameParameter("email").passwordParameter("password");
+		http.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout**")).logoutSuccessUrl("/")
+				.deleteCookies("JSESSIONID").invalidateHttpSession(true);
 
 	}
 

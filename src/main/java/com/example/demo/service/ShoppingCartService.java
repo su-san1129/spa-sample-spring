@@ -80,6 +80,7 @@ public class ShoppingCartService {
 				orderToppingRepository.save(orderTopping);
 			});
 		}
+		System.err.println("登録が完了しました");
 	}
 
 	/**
@@ -122,6 +123,10 @@ public class ShoppingCartService {
 	public void deleteCart(Integer id) {
 		orderToppingRepository.deleteByOrderItemId(id);
 		orderItemRepository.deleteOrderItem(id);
+	}
+
+	public void deleteOrderTopping(Integer id) {
+		orderToppingRepository.deleteById(id);
 	}
 
 }

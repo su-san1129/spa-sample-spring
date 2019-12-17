@@ -9,7 +9,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.demo.domain.LoginUser;
-import com.example.demo.domain.Order;
 import com.example.demo.form.OrderItemForm;
 import com.example.demo.service.ShoppingCartService;
 
@@ -30,15 +29,6 @@ public class ShoppingCartController {
 	 */
 	@RequestMapping("")
 	public String cartList(Model model, @AuthenticationPrincipal LoginUser loginUser) {
-		Integer userId = session.getId().hashCode();
-		if (loginUser != null) {
-			userId = loginUser.getUser().getId();
-		}
-		Order order = shoppingCartService.showOrderByUserIdAndStatus(userId, 0);
-		if (order != null && order.getOrderItemList().size() != 0) {
-			model.addAttribute("order", order);
-		}
-
 		return "cart_list";
 	}
 
@@ -51,6 +41,7 @@ public class ShoppingCartController {
 	 */
 	@RequestMapping("/addCart")
 	public String addCart(OrderItemForm form, @AuthenticationPrincipal LoginUser loginUser) {
+		System.err.println(form);
 		Integer userId = session.getId().hashCode(); // ユーザーIDを仮で設定
 		if (loginUser != null) {
 			// ログインしていたら、ユーザーIDを差し替える

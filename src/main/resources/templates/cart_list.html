@@ -1,0 +1,187 @@
+<html>
+
+<head>
+	<meta charset="utf-8" />
+	<script src="http://unpkg.com/vue/dist/vue.js"></script>
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/element-ui/2.13.0/theme-chalk/index.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/element-ui/2.13.0/index.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/element-ui/2.13.0/locale/ja.js"></script>
+	<title>ラクラクピザ | 商品詳細</title>
+</head>
+
+<body>
+	<div id="app">
+		<el-menu :default-active="activeIndex2" class="el-menu-demo" mode="horizontal" @select="handleSelect"
+			background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
+			<el-menu-item index="1"><a href="/">ラクラクピザ</a></el-menu-item>
+			<el-submenu index="2">
+				<template slot="title">Workspace</template>
+				<el-menu-item index="2-1">商品詳細</el-menu-item>
+				<el-menu-item index="2-2"></el-menu-item>
+				<el-menu-item index="2-3">item three</el-menu-item>
+			</el-submenu>
+			<el-menu-item index="3"><a href="/cart_list">ショッピングカート</a></el-menu-item>
+			<el-menu-item index="4"><a href="/login">ログイン</a></el-menu-item>
+		</el-menu>
+		<el-container>
+			<el-header>
+				<el-col :span="16" :offset="4">
+					<h1>カート内商品</h1>
+					<h2>合計金額: {{order.totalPrice | addComma}}円</h2>
+
+				</el-col>
+			</el-header>
+			<el-col :span="16" :offset="4">
+				<el-main>
+					<el-card class="box-card card" v-for="orderItem in order.orderItemList" :key="orderItem.id">
+						<div slot="header" class="clearfix">
+							<span><strong>{{orderItem.item.name}}</strong></span>
+							<el-tag style="float: right;">サイズ:{{orderItem.size}}</el-tag>
+							<el-button style="float: right; padding-top: 49" type="text">
+							</el-button>
+						</div>
+						<el-row>
+							<el-col :span="10">
+								<el-image style="width: 300px; height: 200px" :src="'/img/'+orderItem.item.imagePath">
+								</el-image>
+
+							</el-col>
+							<el-col :span="14">
+								<div>
+									<div><strong>商品説明</strong></div>
+									{{orderItem.item.description}}
+								</div>
+								<el-tag>数量：{{orderItem.quantity}}個</el-tag>
+								<div><strong>選択中のトッピング：</strong></div>
+								<el-tag v-for="orderTopping in orderItem.orderToppingList" closable
+									:disable-transitions="false" :key="orderTopping.id"
+									@close="handleClose(orderTopping.id)">
+									{{orderTopping.topping.name}}
+								</el-tag>
+								<el-collapse v-model="activeNames" @change="handleChange">
+									<el-collapse-item title="トッピングを追加" :name="orderItem.id">
+										<el-checkbox-group v-model="orderToppings">
+											<el-checkbox v-for="topping in toppings" :label="topping.id">
+												{{topping.name}}
+											</el-checkbox>
+										</el-checkbox-group>
+										<el-button @click="createOrderTopping(orderItem.id)">トッピングを追加</el-button>
+									</el-collapse-item>
+								</el-collapse>
+							</el-col>
+						</el-row>
+						<el-button style="float: right; margin-bottom: 10;" @click="deleteOrderItem(orderItem.id)">削除
+						</el-button>
+
+					</el-card>
+				</el-main>
+			</el-col>
+			<form action="/order_confirm" method="get">
+				<el-button type="warning" style="float: right" @click="onSubmit" native-type="submit">注文に進む</el-button>
+			</form>
+		</el-container>
+	</div>
+	<style>
+		.card {
+			margin: 40px 0;
+		}
+	</style>
+	<script>
+		var app = new Vue({
+			el: '#app',
+			data: {
+				order: null,
+				activeIndex2: '1',
+				request: {
+					orderItemId: '',
+					orderToppings: '',
+				},
+				activeNames: [],
+				toppings: [],
+				orderToppings: [],
+				isShow: false
+			},
+			methods: {
+				reflesh: async function () {
+					try {
+						await axios.get('http://localhost:8080/getRes/cartItem/')
+							.then(response => (this.order = response.data))
+					} catch (error) {
+						console.log(error)
+					}
+
+				},
+				onSubmit() {
+					console.log('Yeah!')
+					this.addToppingMessage()
+				},
+				handleSelect(key, keyPath) {
+					console.log(key, keyPath);
+				},
+				addToppingMessage() {
+					this.$notify({
+						title: 'Success',
+						message: 'トッピングを追加しました！',
+						type: 'success'
+					});
+
+				},
+				deleteToppingMessage() {
+					this.$notify({
+						title: 'Success',
+						message: 'トッピングを削除しました！',
+						type: 'success'
+					});
+
+				},
+				deleteOrderItem: async function (id) {
+					try {
+						console.log(id);
+						await axios.get('http://localhost:8080/getRes/deleteOrderItem/' + id)
+						this.reflesh();
+
+					} catch (error) {
+						console.log(error)
+					}
+				},
+				async handleClose(id) {
+					console.log('id:' + id)
+					await axios.get('http://localhost:8080/getRes/deleteOrderTopping/' + id)
+					this.deleteToppingMessage()
+					this.reflesh();
+				},
+				async createOrderTopping(id) {
+					console.log(id)
+					this.request.orderItemId = id
+					this.request.orderToppings = this.orderToppings
+					console.log(this.request)
+					await axios.post('http://localhost:8080/getRes/createOrderTopping/', this.request)
+					await this.reflesh()
+					this.orderToppings = []
+					this.addToppingMessage()
+				},
+				handleChange(val) {
+					console.log(val);
+				},
+				addTopping(toppingId) {
+
+				}
+			},
+			filters: {
+				addComma: function (val) {
+					return val.toLocaleString();
+				}
+			},
+			mounted() {
+				axios.get('http://localhost:8080/getRes/cartItem/')
+					.then(response => (this.order = response.data))
+				console.log(this.order)
+				axios.get('http://localhost:8080/getRes/toppings')
+					.then(res => (this.toppings = res.data))
+			}
+		})
+	</script>
+</body>
+
+</html>
